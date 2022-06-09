@@ -2,6 +2,7 @@
 
 import pandas as pd
 import numpy as np
+import re
 
 minus_words = pd.read_csv('minus_words.csv', sep=',')  # столбцы: minus_words, count
 ad_stat = pd.read_csv('ad_stat.csv', sep=';')
@@ -32,14 +33,25 @@ def search_word_in_phrases(minus_word=''):
     pass
 
 
-for i, row in minus_words.iterrows():       # i - индекс, row - все остальные данные в строке
-    # получаем значение столбца 'minus_words' из каждой строки ДатаФрейма
-    minus_word = get_word_base(str(row['minus_words']))
+for i_minus, row_minus in minus_words.iterrows():       # i_minus - индекс, row_minus - все остальные данные в строке
+    # Получаем значение столбца 'minus_words' из каждой строки ДатаФрейма. Мы не используем индексы, но их нужно задать
+    minus_word = get_word_base(str(row_minus['minus_words']))
+    print('\n\nКорень минус-слова: "{}"'.format(minus_word))
 
-    print(minus_word)
+    minus_word_reg = r'\b' + minus_word + r'{0,3}'
+    minus_count_dataframe = ad_stat[ad_stat["Запрос пользователя"].str.contains(minus_word_reg)]
+    # minus_count_dataframe = ad_stat[ad_stat["Запрос пользователя"].str.contains(r'\b{}'.format(minus_word))]
+    print('Таблица статистики с фильтром')
+    print(minus_count_dataframe.head(5)[['Запрос пользователя', 'Показы']])
+
+    # for i_phrase, row_phrase in ad_stat.iterrows():
+        # ищем минус слово среди поисковых фраз в таблице статистики
+        # impressions = 0
+        # print('Всего просмотров по минус-слову "{}": {}'.format(minus_word,impressions))
+
 
 # print('Таблица минус-слов')
 # print(minus_words.head())
-print('\n\nТаблица со статистикой')
-print(ad_stat.head(5)[['Запрос пользователя', 'Показы']])
+# print('\n\nТаблица со статистикой')
+# print(ad_stat.head(5)[['Запрос пользователя', 'Показы']])
 # input("Press 'Enter'")
