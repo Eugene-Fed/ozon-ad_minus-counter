@@ -35,14 +35,17 @@ def search_word_in_phrases(minus_word=''):
 
 for i_minus, row_minus in minus_words.iterrows():       # i_minus - индекс, row_minus - все остальные данные в строке
     # Получаем значение столбца 'minus_words' из каждой строки ДатаФрейма. Мы не используем индексы, но их нужно задать
-    minus_word = get_word_base(str(row_minus['minus_words']))
+    minus_word = get_word_base(str(row_minus['minus_words']))   # получаем корень минус-слова
     print('\n\nКорень минус-слова: "{}"'.format(minus_word))
 
-    minus_word_reg = r'\b' + minus_word + r'{0,3}'
-    minus_count_dataframe = ad_stat[ad_stat["Запрос пользователя"].str.contains(minus_word_reg)]
-    # minus_count_dataframe = ad_stat[ad_stat["Запрос пользователя"].str.contains(r'\b{}'.format(minus_word))]
+    minus_word_reg = r'\b' + minus_word + r'.{,3}\b'             # готовим шаблон для поиска вхождения в поиск. фразе
+    minus_count_dataframe = ad_stat[ad_stat["Запрос пользователя"].str.contains(minus_word_reg)]  # DataFrame с минусами
+    minus_impressions = minus_count_dataframe['Показы'].sum()   # сумма показов фраз с минус-словом
+    # minus_count_dataframe = ad_stat[ad_stat["Запрос пользователя"].str.contains(r'\b{}???'.format(minus_word))]
     print('Таблица статистики с фильтром')
     print(minus_count_dataframe.head(5)[['Запрос пользователя', 'Показы']])
+    print('Сумма показов: {}'.format(minus_impressions))
+
 
     # for i_phrase, row_phrase in ad_stat.iterrows():
         # ищем минус слово среди поисковых фраз в таблице статистики
