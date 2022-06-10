@@ -3,17 +3,14 @@
 import pandas as pd
 import os.path
 
+MINUS_FILE = 'data/minus_words.csv'
+STAT_FILE = 'data/ad_stat.csv'
+
 # Проверяем наличие файлов данных. В случае их отсутствия - используем тестовые данные.
-if os.path.isfile('data/minus_words.csv'):
-    MINUS_FILE = 'data/minus_words.csv'
-else:
+if not os.path.exists('data/minus_words.csv'):
     MINUS_FILE = 'data/minus_words_sample.csv'
-
-if os.path.isfile('data/ad_stat.csv'):
-    STAT_FILE = 'data/ad_stat.csv'
-else:
+if not os.path.exists('data/ad_stat.csv'):
     STAT_FILE = 'data/ad_stat_sample.csv'
-
 
 minus_words = pd.read_csv(MINUS_FILE, sep=',')  # столбцы: minus_words, count
 ad_stat = pd.read_csv(STAT_FILE, sep=';')
