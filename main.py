@@ -1,9 +1,20 @@
 # -*- coding: UTF-8 -*-
 
 import pandas as pd
+import os.path
 
-MINUS_FILE = 'minus_words.csv'
-STAT_FILE = 'ad_stat.csv'
+# Проверяем наличие файлов данных. В случае их отсутствия - используем тестовые данные.
+if os.path.isfile('data/minus_words.csv'):
+    MINUS_FILE = 'data/minus_words.csv'
+else:
+    MINUS_FILE = 'data/minus_words_sample.csv'
+
+if os.path.isfile('data/ad_stat.csv'):
+    STAT_FILE = 'data/ad_stat.csv'
+else:
+    STAT_FILE = 'data/ad_stat_sample.csv'
+
+
 minus_words = pd.read_csv(MINUS_FILE, sep=',')  # столбцы: minus_words, count
 ad_stat = pd.read_csv(STAT_FILE, sep=';')
 # столбцы: SKU, Название товара, Поисковая фраза, *Запрос пользователя*, *Показы*, Клики, CTR (%), Расход (руб., с НДС)
